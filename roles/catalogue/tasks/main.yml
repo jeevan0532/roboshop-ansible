@@ -1,0 +1,60 @@
+- name: disable nodejs
+  ansible.builtin.shell: dnf module disable nodejs 
+
+- name: install nodejs
+  ansible.builtin.yum:
+    name: nodejs
+    state: installed
+
+- name: add user
+  ansible.builtin.user: 
+  name: roboshop
+
+- name: removing old app content
+  ansible.builtin.file:
+    path: /app
+    state: absent
+
+- name: creating app directory
+  ansible.builtin.file:
+    path: /app
+    state: directory
+
+- name: downloading catalogue app content
+  ansible.builtin.unarchive:
+    src: curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip
+    dest: /app
+
+- name: installing nodejs dependencies
+  community.general.npm:
+    path: /app
+    state: latest
+
+- name: setting catalogue service file
+  ansible.builtin.copy:
+    src: catalogue.serrvice
+    dest: /etc/systemd/system/catalogue.service
+
+- name: installing catalogue service
+  ansible.builtin.systemd:
+    name: catalogue
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+
+- name: settingup mongodb repo file
+  ansible.builtin.file:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: installing mongod
+  ansible.builtin.yum:
+    name: mongodb-org-shell
+    state: installed
+
+
+- name: load schema
+  community.mongodb.mongodb_shell:
+    login_host: mongodb-dev.devops01.online
+    file: "/path/to/mongo/file.js"
+    idempotent: yes
