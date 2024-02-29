@@ -1,3 +1,7 @@
 - name: test
-  ansible.builtin.debug: 
-      msg: hello from frontend
+  - name: Install the latest version of Apache
+  ansible.builtin.yum:
+    name: nginx
+    state: installed
+
+
