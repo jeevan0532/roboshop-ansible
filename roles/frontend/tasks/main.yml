@@ -1,7 +1,36 @@
 - name: test
-  - name: Install the latest version of Apache
+  - name: Install nginx
   ansible.builtin.yum:
     name: nginx
     state: installed
+
+
+- name: Remove  a html dir
+  ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: absent
+
+- name: creating html dir
+  ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: directory 
+
+- name: downloading the frontend content
+  ansible.builtin.unarchive:
+    src:  https://roboshop-artifacts.s3.amazonaws.com/frontend.zip
+    dest: /usr/share/nginx/html
+    remote_src: yes 
+
+- name: copying roboshop conf file to nginx
+  ansible.builtin.copy:
+    src: roboshop.conf
+    dest: /etc/nginx/default.d/roboshop.conf
+
+- name: Start nginx service
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enables: yes
+
 
 
