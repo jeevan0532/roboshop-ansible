@@ -1,0 +1,22 @@
+- name: disable mysql old version
+  ansible.builtin.shell: dnf module disable mysql -y
+
+- name: copying mysql repo
+  ansible.builtin.copy: 
+      src: mysql.repo
+      dest: /etc/yum.repos.d/mysql.repo
+
+- name: installing mysql server
+  ansible.builtin.yum:
+    name: mysql-community-server 
+    state: installed
+
+- name: start the service 
+  ansible.builtin.systemd:
+    name: mysql
+    state: restarted
+    enabled: yes
+
+- name: reset mysql deault password
+  ansible.builtin.shell: mysql_secure_installation --set-root-pass {{mysql_pass}}
+

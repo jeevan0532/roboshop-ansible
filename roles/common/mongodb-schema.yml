@@ -1,0 +1,20 @@
+- name: settingup mongodb repo file
+  ansible.builtin.file:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+  when: schema_load
+
+- name: installing mongod
+  ansible.builtin.yum:
+    name: mongodb-org-shell
+    state: installed
+  when: schema_load
+
+
+- name: load schema
+  community.mongodb.mongodb_shell:
+    login_host: mongodb-dev.devops01.online
+    file: "/path/to/mongo/file.js"
+    idempotent: yes
+  when: schema_load
+
