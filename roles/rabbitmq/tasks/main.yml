@@ -1,0 +1,30 @@
+- name: configuring erland & rabbitmq repos
+  ansible.builtin.shell: curl -s {{item}} | bash
+            loop:
+                 - https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh
+                 - https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh
+                 
+- name: install rabbitmq
+  ansible.builtin.yum: 
+          name: 
+            - rabbitmq
+            - erlang
+          state: installed
+
+- name: start rabbitmq
+  ansible.builtin.systemd:
+          name: rabbitmq server
+          state: restarted
+          enable: yes
+
+- name: add app user
+  community.rabbitmq.rabbitmq_user:
+    user: roboshop
+    password: "{{rabbitmq-pass}}"
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+    tags: administrator
+
