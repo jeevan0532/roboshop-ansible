@@ -20,7 +20,7 @@
 - name: add app user
   community.rabbitmq.rabbitmq_user:
     user: roboshop
-    password: "{{rabbitmq-pass}}"
+    password: "{{rabbitmq_pass}}"
     vhost: /
     configure_priv: .*
     read_priv: .*
