@@ -1,0 +1,3 @@
+component: rabbitmq
+
+schema_load: no
