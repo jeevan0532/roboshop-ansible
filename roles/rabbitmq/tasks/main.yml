@@ -1,8 +1,8 @@
 - name: configuring erland & rabbitmq repos
   ansible.builtin.shell: curl -s {{item}} | bash
-            loop:
-                 - https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh
-                 - https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh
+  loop:
+     - https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh
+     - https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh
                  
 - name: install rabbitmq
   ansible.builtin.yum: 
