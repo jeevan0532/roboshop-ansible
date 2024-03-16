@@ -1,0 +1,4 @@
+- name: install python
+  ansible.builtin.import_tasks:
+    name: common
+    tasks_from: python
