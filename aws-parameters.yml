@@ -3,7 +3,7 @@
   connection: local
   tasks:
     - name: Create Parameters
-      community.aws.aws_ssm_parameter_store:
+      community.aws.ssm_parameter:
         name: "{{ item.name }}"
         value: "{{ item.value }}"
         region: us-east-1
@@ -33,7 +33,7 @@
 ##encoding the parameter
 
 - name: create secure key/value pair
-  community.aws.aws_ssm_parameter_store:
+  community.aws.ssm_parameter:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
     region: us-east-1
