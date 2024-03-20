@@ -1,6 +1,6 @@
 - name: Create Parameters
   hosts: localhost
-  connection: local
+  connection: ssh
   tasks:
     - name: Create Parameters
       community.aws.ssm_parameter:
@@ -32,11 +32,11 @@
 
 ##encoding the parameter
 
-- name: create secure key/value pair
-  community.aws.ssm_parameter:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    region: us-east-1
-    string_type: "SecureString"
-    loop:
-      - {name: "dev.payment.AMQP_PASS", value: "roboshop123"}
+    - name: create secure key/value pair
+      community.aws.ssm_parameter:
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        region: us-east-1
+        string_type: "SecureString"
+      loop:
+        - {name: "dev.payment.AMQP_PASS", value: "roboshop123"}
